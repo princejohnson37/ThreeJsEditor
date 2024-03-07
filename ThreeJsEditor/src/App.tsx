@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { Suspense, useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Sphere } from "@react-three/drei";
+import STLFileLoader from "./Components/FileLoader/STLFileLoader";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function GeneratedSphere({ position }) {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Sphere args={[3, 32, 32]} position={position}>
+      <meshStandardMaterial color="red" />
+    </Sphere>
+  );
 }
 
-export default App
+function App() {
+  const [spherePosition, setSpherePosition] = useState(null);
+
+  const handleSTLClick = (event) => {
+    // Get the clicked position
+    const { point } = event;
+    setSpherePosition(point.toArray());
+  };
+
+  return (
+    <div className="canvas-container">
+      <Canvas style={{ backgroundColor: "#0f0f0f" }} camera={{ position: [0, -100, 0] }}>
+        <Suspense fallback={null}>
+          <ambientLight intensity={0.5} />
+          <STLFileLoader onClick={handleSTLClick} url={"/model.stl"} />
+          <OrbitControls />
+          {spherePosition && <GeneratedSphere position={spherePosition} />}
+          <directionalLight position={[-2, 5, 2]} intensity={1} />
+        </Suspense>
+      </Canvas>
+    </div>
+  );
+}
+
+export default App;
