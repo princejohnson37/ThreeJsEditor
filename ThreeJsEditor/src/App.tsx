@@ -24,13 +24,11 @@ function App() {
   return (
     <div className="canvas-container">
       <Canvas style={{ backgroundColor: "#0f0f0f" }} camera={{ position: [0, -100, 0] }}>
-        <Suspense fallback={null}>
           <ambientLight intensity={0.5} />
           <STLFileLoader onClick={handleSTLClick} url={"/model.stl"} />
           <OrbitControls />
-          {spherePosition && <GeneratedSphere position={spherePosition} />}
+          {/* {spherePosition && <GeneratedSphere position={spherePosition} />} */}
           <directionalLight position={[-2, 5, 2]} intensity={1} />
-        </Suspense>
       </Canvas>
     </div>
   );
