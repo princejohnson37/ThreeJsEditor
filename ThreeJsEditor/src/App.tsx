@@ -36,7 +36,6 @@ function App() {
 					</Geometry>
 				</mesh>
 				{spherePosition && <GeneratedSphere position={spherePosition} />}
-				<OrbitControls dampingFactor={1} />
 				<directionalLight position={[-2, 5, 2]} intensity={1} />
 			</Canvas>
 		</div>
